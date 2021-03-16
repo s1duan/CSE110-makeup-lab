@@ -4,10 +4,124 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+    <script>
+      window.TrackJS && TrackJS.install({ 
+        token: "da1296263d50447788de2a6312574272"
+        // for more configuration options, see https://docs.trackjs.com
+      });
+  </script>
   </head>
   <body>
     <div>
-      <label for="number">Enter a random number!</label>
-      <input type="text" name="number" id="author" />
-    </div>  
+      <label for="number">Enter a random string (no special characters):</label>
+      <input type="text" name="number" id="myInput">
+      <button id="submit">submit</button>
+    </div>
+    <div>
+      <button id="log" type="button">console log</button>
+      <button id="error" type="button">console error</button>
+      <button id="table" type="button">console table</button>
+      <button id="dir" type="button">console dir</button>
+      <button id="dirxml" type="button">console dirxml</button>
+      <button id="group-start" type="button">console group start</button>
+      <button id="group-end" type="button">console group end</button>
+      <button id="start" type="button">start timer</button>
+      <button id="end" type="button">end timer</button>
+      <button id="trace" type="button">console trace</button>
+      <button id="global-error" type="button">trigger global error</button>
+    </div>
+
+    <script>
+      var AjaxTCRExamples = {};
+      class SpecialCharError extends Error {
+        constructor(message) {
+          super(message)
+          this.name = "SpecialCharError"
+        }
+      }
+
+      document.getElementById("submit").onclick = function() {
+        var pattern = new RegExp(/[~`!#$@%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/);
+        try {
+          var myInput = document.getElementById("myInput").value
+          if(pattern.test(myInput)){
+            throw new SpecialCharError("No Special Characters allowed!")
+          }
+        } catch(err) {
+          alert("Unable to log Input, " + err.name + ": " + err.message)
+          myInput = ""
+        } finally {
+          console.log("Your Input" + myInput)
+        }
+
+      }
+
+      document.getElementById("log").onclick = function() {
+        var num = document.getElementById("myInput").value;
+        console.log("You entered: " + num)
+      }
+
+      document.getElementById("error").onclick = function() {
+        var num = document.getElementById("myInput").value;
+        console.error("Error: " + num)
+      }
+
+      document.getElementById("table").onclick = function() {
+        function cseClass(name, number){
+          this.name = name;
+          this.number = number;
+        }
+        var cse100 = new cseClass("Advanced Data Structure", "cse100");
+        var cse101 = new cseClass("Algorithm", "cse101");
+        var cse110 = new cseClass("Software Engineering", "cse110");
+        console.table([cse100, cse101, cse110]);
+      }
+
+      document.getElementById("dir").onclick = function() {
+        console.dir(document.location)
+      }
+
+      document.getElementById("dirxml").onclick = function() {
+        console.dir(document.body)
+      }
+
+      document.getElementById("group-start").onclick = function() {
+        console.group()
+      }
+
+      document.getElementById("group-end").onclick = function() {
+        console.groupEnd()
+      }
+
+      document.getElementById("start").onclick = function() {
+        console.log("Timer Started")
+        console.time()
+      }
+
+      document.getElementById("end").onclick = function() {
+        console.log("Timer ended")
+        console.timeEnd()
+      }
+      document.getElementById("trace").onclick = function traceFunc() {
+        console.trace()
+      }
+
+      document.getElementById("global-error").onclick = function() {
+        
+        try { 
+          abooM("error triggered!")
+        }
+        catch(err){
+          if (window.onerror){
+            console.error("caught window.onerror: " + err.message)
+          }
+          else{
+            console.error("not window.onerror")
+          }
+        }
+      }
+
+    </script>
   </body>
+</html>
